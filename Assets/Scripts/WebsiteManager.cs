@@ -43,16 +43,22 @@ public class WebsiteManager : MonoBehaviour
     public void TurnOnAboutMePage() {
     if (CheckIfCurrentPageTheSame(AboutMePage)) return;
         SwitchPage(AboutMePage);
+        WebsiteURLText.text = "https://gabrieliusgintalas.com/home";
+        BrowserWebsiteNameText.text = "Gabrielius Gintalas Portfolio | About Me | Windows - Internet Explorer";
     }
 
     public void TurnOnProjectsPage() {
         if (CheckIfCurrentPageTheSame(ProjectsPage)) return;
         SwitchPage(ProjectsPage);
+        WebsiteURLText.text = "https://gabrieliusgintalas.com/projects";
+        BrowserWebsiteNameText.text = "Gabrielius Gintalas Portfolio | Projects | Windows - Internet Explorer";
     }
 
     public void TurnOnResumePage() {
         if (CheckIfCurrentPageTheSame(ResumePage)) return;
         SwitchPage(ResumePage);
+        WebsiteURLText.text = "https://gabrieliusgintalas.com/resume";
+        BrowserWebsiteNameText.text = "Gabrielius Gintalas Portfolio | Resume | Windows - Internet Explorer";
     }
 
     private void SwitchPage(GameObject page) {

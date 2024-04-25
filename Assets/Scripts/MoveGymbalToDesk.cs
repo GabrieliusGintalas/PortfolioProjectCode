@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEditor.ShaderKeywordFilter;
 
 public class MoveGymbalToDesk : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class MoveGymbalToDesk : MonoBehaviour
     [SerializeField] private Vector3 newRotation;
     [SerializeField] private float moveSpeedToDesk;
     [SerializeField] private float rotationSpeedToDesk;
+    [SerializeField] private float colorShiftSpeed;
 
     [SerializeField] private float delayBetweenMoveAndZoom;
     [SerializeField] private float newCameraFOV;
@@ -38,7 +40,11 @@ public class MoveGymbalToDesk : MonoBehaviour
         Vector3 startRotation = transform.rotation.eulerAngles; // Store the start rotation
         float moveTime = 0; // Timing for movement
         float rotateTime = 0; // Timing for rotation
+        float colorShift = 0;
         Color initialColor = leftClickText.color;
+        Color initialAmbientLight = RenderSettings.ambientLight;
+        Color initialEquatorColor = RenderSettings.ambientEquatorColor;
+        Color initialGroundColor = RenderSettings.ambientGroundColor;
 
         while (moveTime < 1 || rotateTime < 1)
         {
@@ -47,7 +53,12 @@ public class MoveGymbalToDesk : MonoBehaviour
                 transform.position = Vector3.Lerp(startPosition, newPosition, moveTime);
                 leftClickText.color = new Color(initialColor.r, initialColor.g, initialColor.b, Mathf.Lerp(initialColor.a, 0, moveTime));
             }
-            
+            if(colorShift < 1) {
+                mainCamera.backgroundColor = Color.Lerp(mainCamera.backgroundColor, Color.white, moveTime);
+                RenderSettings.ambientLight = Color.Lerp(initialAmbientLight, Color.white, moveTime);
+                RenderSettings.ambientEquatorColor = Color.Lerp(initialEquatorColor, Color.white, moveTime);
+                RenderSettings.ambientGroundColor = Color.Lerp(initialGroundColor, Color.white, moveTime);
+            }
             if (rotateTime < 1) {
                 rotateTime += Time.deltaTime * rotationSpeedToDesk;
                 transform.rotation = Quaternion.Euler(Vector3.Lerp(startRotation, newRotation, rotateTime));
