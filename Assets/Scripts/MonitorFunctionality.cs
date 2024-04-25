@@ -1,36 +1,45 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Video;
 
 public class MonitorFunctionality : MonoBehaviour
 {
-    [SerializeField] private Material monitorMaterial;
+    [SerializeField] private GameObject blackScreen;
+    [SerializeField] private VideoClip loadingVideo;
+    [SerializeField] private VideoClip bootUpVideo;
     private VideoPlayer videoPlayer;
+    private bool isPlayingLoading = false;
 
     void Awake()
     {
         videoPlayer = GetComponent<VideoPlayer>();
+        blackScreen.SetActive(true);
+
+        videoPlayer.loopPointReached += OnVideoFinished;
     }
 
     public void TurnOnMonitor()
     {
+        isPlayingLoading = true;
+        videoPlayer.clip = loadingVideo;
+        Destroy(blackScreen);
         videoPlayer.Play();
     }
 
-    public void StopVideo()
-    {
-        videoPlayer.Stop();
+    private void OnVideoFinished(VideoPlayer videoPlayer){
+        if(isPlayingLoading){
+            isPlayingLoading = false;
+            videoPlayer.clip = bootUpVideo;
+            videoPlayer.Play();
+        } else {
+            gameObject.SetActive(false);
+        }
     }
 
-    public void PauseVideo()
+    private void OnDestroy()
     {
-        videoPlayer.Pause();
-    }
-
-    public void RestartVideo()
-    {
-        videoPlayer.Stop();
-        videoPlayer.Play();
+        videoPlayer.loopPointReached -= OnVideoFinished;
     }
 }
