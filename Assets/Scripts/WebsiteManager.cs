@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
-using UnityEditor.EditorTools;
-using System.Diagnostics.Tracing;
-using Unity.VisualScripting;
 
 public class WebsiteManager : MonoBehaviour
 {

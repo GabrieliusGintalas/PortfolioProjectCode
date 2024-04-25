@@ -22,6 +22,7 @@ public class HighlightText : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnPointerEnter(PointerEventData eventData)
     {
         textMesh.color = highlightColor; 
+        AudioManager.Instance.PlayHighlightOverButtonSound();
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -31,6 +32,7 @@ public class HighlightText : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerClick(PointerEventData eventData){
         Debug.Log("Buttonwasclicked!!!");
+        AudioManager.Instance.PlayClickButtonSound();
         if(WhatButton == "AboutMe"){
             WebsiteManager.Instance.TurnOnAboutMePage();
         } else if (WhatButton == "Project"){
