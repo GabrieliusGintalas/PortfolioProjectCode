@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems; // Required for event interfaces
 using TMPro;
 
-public class TextInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class TextInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private TextMeshProUGUI text;
     private Color originalColor;
@@ -29,24 +29,4 @@ public class TextInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         text.color = originalColor; 
     }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        DownloadFile();
-        AudioManager.Instance.PlayClickButtonSound();
-    }
-
-    private void DownloadFile()
-    {
-#if UNITY_WEBGL && !UNITY_EDITOR
-        DownloadFile_JS(); 
-#else
-        Debug.Log("Download functionality is currently supported only in WebGL builds.");
-#endif
-    }
-
-#if UNITY_WEBGL && !UNITY_EDITOR
-    [System.Runtime.InteropServices.DllImport("__Internal")]
-    private static extern void DownloadFile_JS();
-#endif
 }
