@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using EPOOutline;
 
 public class MoveGymbalToDesk : MonoBehaviour
 {
@@ -19,6 +20,10 @@ public class MoveGymbalToDesk : MonoBehaviour
     [SerializeField] private MonitorFunctionality monitorFunctionality;
     [SerializeField] private float delayToTurnOnMonitor;
 
+    [SerializeField] private Outlinable outlinable;
+
+    [SerializeField] private float outlineFadeDuration = 1f; // Duration to fade in/out
+    private Coroutine fadeCoroutine;
     private BoxCollider boxCollider;
     private Camera mainCamera;
 
@@ -31,6 +36,38 @@ public class MoveGymbalToDesk : MonoBehaviour
     {
         StartCoroutine(MoveObject());
         boxCollider.enabled = false;
+    }
+
+    void OnMouseEnter()
+    {
+        Debug.Log("Highlighting desk!!");
+        if (fadeCoroutine != null)
+            StopCoroutine(fadeCoroutine);
+        fadeCoroutine = StartCoroutine(FadeOutlineTo(1.0f)); 
+    }
+
+    void OnMouseExit()
+    {
+        Debug.Log("Not Highlighting desk!!");
+        if (fadeCoroutine != null)
+            StopCoroutine(fadeCoroutine);
+        fadeCoroutine = StartCoroutine(FadeOutlineTo(0.0f)); 
+    }
+
+    public IEnumerator FadeOutlineTo(float targetAlpha)
+    {
+        float timeElapsed = 0;
+        Color startColor = outlinable.OutlineParameters.Color;
+        Color targetColor = new Color(startColor.r, startColor.g, startColor.b, targetAlpha);
+
+        while (timeElapsed < outlineFadeDuration)
+        {
+            outlinable.OutlineParameters.Color = Color.Lerp(startColor, targetColor, timeElapsed / outlineFadeDuration);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        outlinable.OutlineParameters.Color = targetColor; // Ensure target color is set after interpolation
     }
 
     private IEnumerator MoveObject()
